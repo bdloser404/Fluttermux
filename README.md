@@ -5,7 +5,7 @@ Features:
 
 - 🚀 **Latest Flutter SDK**: Instantly install the newest Flutter SDK.
   
-- 📝 **Additional Tools******: Includes Neovim, JDK 19 Support, and Gradle.
+- 📝 **Additional Tools**: Includes Neovim, JDK 19 Support, and Gradle.
   
 - 🔧 **Optimized Termux**: Configure for efficient Flutter app development with adb hot-reloading.
   
