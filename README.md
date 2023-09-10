@@ -18,9 +18,9 @@ Features:
 - 🧩 **User-Friendly**: Easy setup for your Flutter journey
 
 <p align="middle" float="left">
-  <img src="/example.jpg" width="40%" />
+  <img src="/img/hotreload.png" width="40%" />
   
-  <img src="/hotreload.jpg" width="40%" /> 
+  <img src="/img/devtool.png" width="40%" /> 
 </p>
 
 
@@ -128,9 +128,9 @@ adb connect 192.168.X.X:5667
 
 Follow below screenshot to get pair addess:
 <p align="middle" float="left">
-  <img src="/WIRELESS.jpg" width="30%" />
-  <img src="/PAIR.jpg" width="30%" />
-  <img src="/PAIR_CODE.jpg" width="30%" />
+  <img src="/img/WIRELESS.png" width="30%" />
+  <img src="/img/pair.png" width="30%" />
+  <img src="/img/pair_code.png" width="30%" />
   
 </p>
 
