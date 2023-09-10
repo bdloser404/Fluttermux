@@ -103,7 +103,7 @@ In VMOS, navigate to "Settings" within the virtual Android environment.
 - Now, your VMOS Android environment is ready to be connected via ADB using the provided IP address and port number (`192.168.X.X:5667` in this example).
 
 <p align="middle" float="left">
-  <img src="/VMOS.jpg" width="40%" />
+  <img src="/img/vmos.png" width="40%" />
 </p>
 
 You can use these methods to perform ADB actions on Termux
@@ -128,7 +128,7 @@ adb connect 192.168.X.X:5667
 
 Follow below screenshot to get pair addess:
 <p align="middle" float="left">
-  <img src="/img/WIRELESS.png" width="30%" />
+  <img src="/img/wireless.png" width="30%" />
   <img src="/img/pair.png" width="30%" />
   <img src="/img/pair_code.png" width="30%" />
   
