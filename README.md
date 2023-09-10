@@ -35,7 +35,7 @@ Features:
 
 Clone Git:
 ```
-git clone https://github.com/mdHABIBURRAHMANHABIB1/markdowntest && cd markdowntest
+git clone https://github.com/bdloser404/Fluttermux && cd Fluttermux
 ```
 
 Run Install Sh:
