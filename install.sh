@@ -13,6 +13,9 @@ apt install ncurses-utils openssl-tool nodejs -y
 
 pkg install neovim -y
 
-cp fluttermux $PREFIX/bin/
-fluttermux --install
-
+install(){
+	chmod +x fluttermux
+	cp fluttermux $PREFIX/bin/
+	fluttermux --install
+}
+install
