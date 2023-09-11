@@ -38,9 +38,9 @@ Clone Git:
 git clone https://github.com/bdloser404/Fluttermux && cd Fluttermux
 ```
 
-Run Install Sh:
+Run Installer:
 ```
-chmod +x install.sh fluttermux && ./install.sh
+chmod +x * && ./install.sh
 ```
 
 ## Intialize Your First Project
