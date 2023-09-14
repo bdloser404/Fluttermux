@@ -108,7 +108,7 @@ nmap <leader>a <Plug>(coc-codeaction-selected)
 "coc config
 let g:coc_global_extensions = [
   \ 'coc-eslint', 
-	\ 'coc-flutter-tools',
+  \ 'coc-flutter-tools',
   \ 'coc-snippets',
   \ 'coc-json',
   \ ]
@@ -126,10 +126,12 @@ au BufWritePost *.dart :CocCommand flutter.dev.hotRestart
 "autocmd VimEnter *.dart :if &ft == 'dart' | CocCommand flutter.lsp.restart | endif | redraw!
 
 autocmd VimEnter *.dart :CocCommand flutter.lsp.restart | redraw!
+"== AUTOCMD END ================================
+
 inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 nnoremap <C-o> :CocCommand flutter.dev.openDevLog<CR>
 nnoremap <C-r> :CocCommand flutter.run -d web-server --web-port=8000<CR>
 nnoremap <C-v> :CocCommand flutter.dev.hotRestart<CR>
 vmap <leader>f <Plug>(coc-format-selected)
-"== AUTOCMD END ================================
+
