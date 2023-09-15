@@ -1,12 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/bash
 
-trap 'exit_script' SIGINT
-exit_script() {
-  read -n 1 -t 5 -p "Exit? (Y/n) " choice
-  choice="${choice,,}"
-  [ "$choice" == "y" ] && exit 1
-}
-
 apt update && apt upgrade -y
 apt install ncurses-utils openssl-tool nodejs -y
 pkg install neovim -y
