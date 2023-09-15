@@ -1,4 +1,4 @@
-## Native Flutter Setup in Termux - Fluttermux
+ ## Native Flutter Setup in Termux - Fluttermux
 **Fluttermux** is a powerful bash script tailored to simplify the installation and setup of Flutter within your Termux environment. With Fluttermux, you get the latest Flutter SDK, alongside essential tools like Neovim, JDK 19 Support, and Gradle. It optimizes Termux for efficient Flutter app development with adb hot-reloading, all while running natively on your Android device for superior performance and stability. Compatible with all Android (aarch64/arm64) devices, Fluttermux is your shortcut to hassle-free Flutter development in Termux."
 Features:
 
@@ -18,9 +18,9 @@ Features:
 - 🧩 **User-Friendly**: Easy setup for your Flutter journey
 
 <p align="middle" float="left">
-  <img src="/img/hotreload.png" width="40%" />
+  <img src="https://github.com/bdloser404/Fluttermux/blob/main/img/hotreload.png" width="40%" />
   
-  <img src="/img/devtool.png" width="40%" /> 
+  <img src="https://github.com/bdloser404/Fluttermux/blob/main/img/devtool.png" width="40%" /> 
 </p>
 
 
@@ -29,37 +29,29 @@ Features:
 ## Installaion
 
 >[!WARNING]
->I am aware that mistakes and errors are inevitable, especially in a complex project like Fluttermux. This is version 1.0.0, and I am committed to fixing any errors that are found. I ask for your understanding and patience as I work to improve Fluttermux. In the meantime, I recommend that you update and upgrade Termux before trying to install Fluttermux. This will help to ensure that Fluttermux runs smoothly and without errors.
-
-### Here is the installation tutorial for Fluttermux:
-
-Clone Git:
-```
-git clone https://github.com/bdloser404/Fluttermux && cd Fluttermux
-```
+>I am aware that mistakes and errors are inevitable, especially in a complex project like Fluttermux. I am committed to fixing any errors that are found. I ask for your understanding and patience as I work to improve Fluttermux. In the meantime, I recommend that you update and upgrade Termux before trying to install Fluttermux. This will help to ensure that Fluttermux runs smoothly and without errors.
 
 Run Installer:
 ```
-chmod +x install.sh && ./install.sh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/bdloser404/Fluttermux/main/install.sh)"
 ```
 
 ## Intialize Your First Project
 Once the installation is complete, you can start creating Flutter apps by running the following command:
 ```
-flutter create myapp 
-```
-
-
-Fix your project gradle:
-```
-cd myapp && fluttermux --fix gradle
+fluttermux --create myapp 
 ```
 
 >[!IMPORTANT]
->The `fluttermux --fix gradle` command is very important. You need to run this command every time you create a new Flutter project. This command fixes the permissions for the gradlew executable, updates the Gradle wrapper distribution URL to support JDK 19, and sets the Gradle property for using aapt2 (aarch64).
+>The `fluttermux --fix gradle` command is very important. You need to run this command every time you create a new Flutter project with `flutter create <project>`. This command fixes the permissions for the gradlew executable, updates the Gradle wrapper distribution URL to support JDK 19, and sets the Gradle property for using aapt2 (aarch64).
 
 ## Usage
 Fluttermux provides a set of commands and options to help you manage your Flutter environment efficiently. Here are the key options available:
+
+`--create <task>`: This  option allows you to create flutter project. its equivalent to `flutter create <appname>` but then it will fix your project for gradle support.
+```
+fluttermux --create blogapp
+```
 
 `--patch <task>`: Use this option to manually patch specific components of your Flutter environment, such as SDK, Dart, Flutter, or Java. For example, to patch the SDK, you can run:
 ```
@@ -103,7 +95,7 @@ In VMOS, navigate to "Settings" within the virtual Android environment.
 - Now, your VMOS Android environment is ready to be connected via ADB using the provided IP address and port number (`192.168.X.X:5667` in this example).
 
 <p align="middle" float="left">
-  <img src="/img/vmos.png" width="40%" />
+  <img src="https://github.com/bdloser404/Fluttermux/blob/main/img/vmos.png" width="40%" />
 </p>
 
 You can use these methods to perform ADB actions on Termux
@@ -128,9 +120,9 @@ adb connect 192.168.X.X:5667
 
 Follow below screenshot to get pair addess:
 <p align="middle" float="left">
-  <img src="/img/wireless.png" width="30%" />
-  <img src="/img/pair.png" width="30%" />
-  <img src="/img/pair_code.png" width="30%" />
+  <img src="https://github.com/bdloser404/Fluttermux/blob/main/img/wireless.png" width="30%" />
+  <img src="https://github.com/bdloser404/Fluttermux/blob/main/img/pair.png" width="30%" />
+  <img src="https://github.com/bdloser404/Fluttermux/blob/main/img/pair_code.png" width="30%" />
   
 </p>
 
