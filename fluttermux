@@ -340,7 +340,7 @@ patch_java_binary(){
 	  (cd ~/.fluttermux/jdk-19.0.2/lib/ && patchelf --set-interpreter "$PREFIX/glibc/lib/ld-linux-aarch64.so.1" jexec)
 	  tput cnorm
 	else
-		(cd ~/.fluttermux && rm -rf jdk-19.0.2)
+		(cd ~/.fluttermux && rm -rf jdk-19.0.2 && openjdk-19.0.2_linux-aarch64_bin.tar.gz)
 		setting_up_java
 	fi
 }
