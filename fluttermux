@@ -302,26 +302,23 @@ getting_flutter_clone() {
 
 setting_up_java(){
 
-  java_path="$HOME/.fluttermux/jdk-19.0.2/bin/"
+  java_path="$HOME/.fluttermux/jdk-19.0.2/lib/"
   if [ -e "$java_path" ]; then
     tput bold
     tput setaf 2
     spinner "sleep 1" "Checking For java" "Installing Java"
     
   else
-		if [ -e "$HOME/.fluttermux/openjdk-19.0.2_linux-aarch64_bin.tar.gz" ]; then
-			tput bold
-			(cd ~/.fluttermux && spinner "tar -xf openjdk-19.0.2_linux-aarch64_bin.tar.gz" "Extracing Java" "Extract")
-		else
-    	tput bold 
-    	spinner "sleep 1" "Downloading Java" "Starting Download.."
-    	tput sgr0
-    	(cd ~/.fluttermux/ && curl -OL https://download.java.net/java/GA/jdk19.0.2/fdb695a9d9064ad6b064dc6df578380c/7/GPL/openjdk-19.0.2_linux-aarch64_bin.tar.gz)
-    	tput bold
-			(cd ~/.fluttermux && spinner "tar -xf openjdk-19.0.2_linux-aarch64_bin.tar.gz" "Extracing Java" "Extract")
-    	tput sgr0
-		fi
-	fi
+    (cd ~/.fluttermux && rm -rf jdk-19.0.2)
+    (cd ~/.fluttermux && rm -rf openjdk-19.0.2_linux-aarch64_bin.tar.gz)
+    tput bold 
+    spinner "sleep 1" "Downloading Java" "Starting Download.."
+    tput sgr0
+    (cd ~/.fluttermux/ && curl -OL https://download.java.net/java/GA/jdk19.0.2/fdb695a9d9064ad6b064dc6df578380c/7/GPL/openjdk-19.0.2_linux-aarch64_bin.tar.gz)
+    tput bold
+    (cd ~/.fluttermux && spinner "tar -xf openjdk-19.0.2_linux-aarch64_bin.tar.gz" "Extracing Java" "Extract")
+    tput sgr0
+  fi
   patch_java_binary
 }
 
@@ -340,8 +337,7 @@ patch_java_binary(){
 	  (cd ~/.fluttermux/jdk-19.0.2/lib/ && patchelf --set-interpreter "$PREFIX/glibc/lib/ld-linux-aarch64.so.1" jexec)
 	  tput cnorm
 	else
-		(cd ~/.fluttermux && rm -rf jdk-19.0.2 && rm -rf openjdk-19.0.2_linux-aarch64_bin.tar.gz)
-		setting_up_java
+	  setting_up_java
 	fi
 }
 
