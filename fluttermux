@@ -20,6 +20,7 @@ function exit_script() {
   if [[ "$choice" == "y" ]]; then
     tput reset
     exit 1
+  fi
 }
 
 # Clear Line
