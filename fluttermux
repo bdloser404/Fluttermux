@@ -358,11 +358,13 @@ getting_android_sdk_files(){
       tput bold 
       tput setaf 2
       (cd ~/.fluttermux && spinner "tar -xf android-sdk.tar.xz" "- Extracting Android Sdk" "Extract" && mv ~/.fluttermux/android-sdk ~/.fluttermux/Android)
+      tput sgr0
     else
-			tput bold
+      tput bold
+      tput setaf 2
       spinner "sleep 1" "Downloading Android Sdk" "Starting Download.."
-			tput sgr0
-      (cd ~/.fluttermux/ && curl -OL https://github.com/AndroidIDEOfficial/androidide-tools/releases/download/sdk/android-sdk.tar.xz && spinner "tar -xf android-sdk.tar.xz" "Extracing Java" "Extract" && mv ~/.fluttermux/android-sdk ~/.fluttermux/Android)
+      (cd ~/.fluttermux/ && curl -OL https://github.com/AndroidIDEOfficial/androidide-tools/releases/download/sdk/android-sdk.tar.xz && spinner "tar -xf android-sdk.tar.xz" "Extracing Android sdk" "Extract" && mv ~/.fluttermux/android-sdk ~/.fluttermux/Android)
+      tput sgr0
     fi
   fi
 }
@@ -380,9 +382,9 @@ getting_cmdline_files(){
       rm -rf ~/.fluttermux/Android/cmdline-tools
       (cd "$HOME/.fluttermux" && spinner "tar -xf cmdline-tools.tar.xz" "Extracting Cmdline Tools" "Extract" && mv ~/.fluttermux/cmdline-tools ~/.fluttermux/Android/.)
     else
-			tput bold
+      tput bold
+      tput setaf 2
       spinner "sleep 1" "Downloading Cmdline Tools" "Starting Download.."
-			tput sgr0
       (cd ~/.fluttermux/ && curl -OL https://github.com/AndroidIDEOfficial/androidide-tools/releases/download/sdk/cmdline-tools.tar.xz && spinner "tar -xf cmdline-tools.tar.xz" "Extracing Cmdline Tools" "Extract" && mv ~/.fluttermux/cmdline-tools ~/.fluttermux/Android/.)
     fi
   fi
