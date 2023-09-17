@@ -632,6 +632,7 @@ uninstall(){
     tput bold
     tput setaf 1
     rm -rf ~/.fluttermux
+    echo "Uninstall Successful. (: Happy FLuttring Without Fluttermux."
     tput sgr0
   fi
 }
