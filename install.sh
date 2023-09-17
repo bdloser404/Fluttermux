@@ -2,7 +2,6 @@
 
 apt update && apt upgrade -y
 apt install ncurses-utils openssl-tool nodejs -y
-pkg install neovim -y
 
 install(){
   fluttermux --install
