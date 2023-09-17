@@ -8,11 +8,11 @@ install(){
 }
 
 if [ -f "$PREFIX/bin/fluttermux" ]; then
-  rm "$PREFIX/bin/fluttermux"
   tput bold
   tput setaf 1
   echo "Fluttermux is Already exist."
   tput srg0
+  rm "$PREFIX/bin/fluttermux"
 fi
 
 FLUTTERMUX_URL="https://raw.githubusercontent.com/bdloser404/Fluttermux/main/fluttermux"
