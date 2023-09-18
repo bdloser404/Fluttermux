@@ -48,7 +48,7 @@ flutter build apk --debug
 ```
 
 >[!WARNING]
-> Gradle task may take 15-20 min to complete.(depending on your network speed)
+> Gradle task may take 15-20 min for first time. (depending on your network speed)
 
 >[!IMPORTANT]
 >The `fluttermux --fix gradle` command is very important. You need to run this command every time you create a new Flutter project with `flutter create <project>`. This command fixes the permissions for the gradlew executable, updates the Gradle wrapper distribution URL to support JDK 19, and sets the Gradle property for using aapt2 (aarch64).
