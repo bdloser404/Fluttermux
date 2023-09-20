@@ -217,18 +217,27 @@ set_exports() {
 flutter_and_android_setup(){
   flutter_only_setup
   android_only_setup
-	tput clear
-	if flutter doctor; then
-		tput bold
-		tput setaf 2
-		echo ""
-		echo "Fluttermux Is Installed Successflully."
-		echo ""
-		tput sgr0
-		tput bold
-		echo "fluttermux --help '$(tput sgr0)For more information'" 
-
-	fi
+  tput clear
+  if flutter doctor; then
+    tput bold
+    tput setaf 2
+    echo ""
+    echo "Fluttermux Is Installed Successflully."
+    echo ""
+    tput sgr0
+    tput bold
+    echo "fluttermux --help '$(tput sgr0)For more information'" 
+  fi
+  if [[ $SHELL == *"zsh"* ]]; then
+    source ~/.zshrc
+  elif [[ $SHELL == *"bash"* ]]; then
+    source ~/.bashrc
+  else
+    tput bold
+    tput setaf 1
+    spinner "sleep 1" "—Unsupported shell: $SHELL" "Exitting.."
+    exit 1
+  fi
 
 }
 
