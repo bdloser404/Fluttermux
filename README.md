@@ -53,6 +53,7 @@ It will download and setup gradle Then you are ready for build your dream app.
 
 Run app Web Mode:
 ```
+
 flutter run -d web-server --web-port=8000
 ```
 >[!IMPORTANT]
