@@ -42,14 +42,19 @@ Once the installation is complete, you can start creating Flutter apps by runnin
 fluttermux --create myapp 
 ```
 
-Now run gradle task:
+Now Build Debug App:
 ```
 flutter build apk --debug
 ```
+It will download and setup gradle Then you are ready for build your dream app.
 
 >[!WARNING]
 > Gradle task may take 15-20 min for first time. (depending on your network speed)
 
+Run app Web Mode:
+```
+flutter run -d web-server --web-port=8000
+```
 >[!IMPORTANT]
 >The `fluttermux --fix gradle` command is very important. You need to run this command every time you create a new Flutter project with `flutter create <project>`. This command fixes the permissions for the gradlew executable, updates the Gradle wrapper distribution URL to support JDK 19, and sets the Gradle property for using aapt2 (aarch64).
 
