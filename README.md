@@ -1,4 +1,4 @@
- ## Native Flutter Setup in Termux - Fluttermux
+ ## Run Flutter in Termux Natively- Fluttermux
 **Fluttermux** is a powerful bash script tailored to simplify the installation and setup of Flutter within your Termux environment. With Fluttermux, you get the latest Flutter SDK, alongside essential tools like Neovim, JDK 19 Support, and Gradle. It optimizes Termux for efficient Flutter app development with adb hot-reloading, all while running natively on your Android device for superior performance and stability. Compatible with all Android (aarch64/arm64) devices, Fluttermux is your shortcut to hassle-free Flutter development in Termux."
 Features:
 
