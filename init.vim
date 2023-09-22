@@ -121,7 +121,7 @@ nmap <C-M> :exe 'silent !dartfmt %'<CR>
 " identified as typescript react file, so add following
 "au BufNewFile,BufRead *.ts setlocal filetype=typescript
 "au BufNewFile,BufRead *.tsx setlocal filetype=typescript.tsx
-au BufWritePost *.dart :CocCommand flutter.dev.hotRestart
+"au BufWritePost *.dart :CocCommand flutter.dev.hotRestart
 "autocmd VimEnter * :CocCommand flutter.lsp.restart | redraw!
 "autocmd VimEnter *.dart :if &ft == 'dart' | CocCommand flutter.lsp.restart | endif | redraw!
 
