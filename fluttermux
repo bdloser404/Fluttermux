@@ -96,7 +96,7 @@ install_gpkg_dev() {
   tput setaf 2
   spinner "sleep 1" "- Checking for install" "Checking"
   tput sgr0
-  yes '' | pacman -S gpkg-dev
+  yes | pacman -S glibc
 }
 
 check_gpkg_dev_installed() {
