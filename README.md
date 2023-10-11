@@ -29,12 +29,11 @@ Features:
 ## Installaion
 
 >[!WARNING]
->I am aware that mistakes and errors are inevitable, especially in a complex project like Fluttermux. I am committed to fixing any errors that are found. I ask for your understanding and patience as I work to improve Fluttermux. In the meantime, I recommend that you update and upgrade Termux before trying to install Fluttermux. This will help to ensure that Fluttermux runs smoothly and without errors.
+>Termux Remove Gpkg-dev, So currently this method is not working anymore.
 
-Run Installer:
-```
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/bdloser404/Fluttermux/main/install.sh)"
-```
+### Try 
+
+https://github.com/mumumusuc/termux-flutter
 
 ## Intialize Your First Project
 Once the installation is complete, you can start creating Flutter apps by running the following command:
