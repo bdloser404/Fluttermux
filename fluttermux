@@ -298,7 +298,7 @@ flutter_only_setup() {
 getting_flutter_clone() {
   local flutter_dir="$HOME/.fluttermux/flutter"
   
-  if [ ! -d "$flutter_dir" ] && git clone -b stable https://github.com/flutter/flutter.git "$flutter_dir"; then
+  if [ ! -d "$flutter_dir" ] && git clone https://github.com/flutter/flutter -b 3.13.4 "$flutter_dir"; then
     tput bold
     tput setaf 2
     spinner "sleep 1" "- Flutter SDK cloned successfully." "Flutter Clone"
