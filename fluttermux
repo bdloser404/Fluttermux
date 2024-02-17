@@ -4,7 +4,7 @@
 # title            :Fluttermux
 # description     :Flutter in Termux Natively 
 # author          :Bdloser
-# version         :1.0.1
+# version         :2.0.1
 #
 ########################################################
 
@@ -47,9 +47,9 @@ function spinner() {
 }
 
 
-# requred packages instlallerr
+# requred packages instlaller
 install_packages_if_not_installed() {
-  local packages=("patchelf" "ldd" "which" "python" "python-pip" "aapt2" "git" "android-tools" "neovim")
+  local packages=("ldd" "which" "python" "python-pip" "openjdk-17" "aapt2" "git" "android-tools" "neovim" "x11-repo" "termux-x11-nightly" "gtk3" "fontconfig" "xorgproto" "ninja" "cmake" "clang" "pkg-config")
   
   for package in "${packages[@]}"; do
     if ! command -v "$package" &> /dev/null; then
@@ -63,54 +63,6 @@ install_packages_if_not_installed() {
   done
 }
 
-setting_up_pacman() {
-  tput bold
-  tput setaf 2
-  spinner "sleep 1" "-Checking for Pacman" "Checking"
-  tput sgr0
-  pkg install pacman -y
-  pacman-key --init
-  pacman-key --populate
-  tput bold
-  tput setaf 2
-  spinner "sleep 1" "- Checking for update.." "Starting Update"
-  tput sgr0
-  pacman -Syu
-  
-  tput cnorm
-}
-
-check_pacman_installed() {
-  if ! command -v pacman &> /dev/null; then
-    tput bold
-    tput setaf 1
-    echo "Pacman is not installed. Setting up Pacman..."
-    tput sgr0
-    setting_up_pacman
-  fi
-}
-
-install_gpkg_dev() {
-  check_pacman_installed
-  tput bold
-  tput setaf 2
-  spinner "sleep 1" "- Checking for install" "Checking"
-  tput sgr0
-  yes | pacman -S glibc
-}
-
-check_gpkg_dev_installed() {
-  local prefix_glibc_lib="$PREFIX/glibc/lib"
-  if [ -d "$prefix_glibc_lib" ]; then
-    tput bold
-    tput setaf 2
-    spinner "sleep 1" "-Chcking for Update" "Update"
-    tput sgr0
-  else
-    install_gpkg_dev
-  fi
-}
-
 flutter_installer_fix_sebang(){
   termux-fix-shebang ~/.fluttermux/flutter/bin/internal/update_dart_sdk.sh
   chmod +x ~/.fluttermux/flutter/bin/internal/update_dart_sdk.sh
@@ -118,50 +70,71 @@ flutter_installer_fix_sebang(){
   chmod +x ~/.fluttermux/flutter/bin/flutter
 }
 
-patch_dart_sdk_binary() {
-  local flutter_bin_path="$HOME/.fluttermux/flutter/bin"
-  
-  if [ -e "$flutter_bin_path" ]; then
+getting_engine(){
+  dest="$HOME/.fluttermux/flutter/bin/cache"
+  engine_path="$dest/artifacts/engine"
+  file="$HOME/.fluttermux/engine/engine.version"
+  ver="$HOME/.fluttermux/flutter/bin/internal/engine.version"
+  if [ -e "$engine_path" ]; then
     tput bold
     tput setaf 2
-    spinner "sleep 2" "-Patching Flutter SDK binary..." "Patch"
-    
-    # Patch the Dart SDK binary with an additional RPATH
-    (cd "$flutter_bin_path/cache/dart-sdk/bin" && patchelf --set-interpreter "$PREFIX/glibc/lib/ld-linux-aarch64.so.1" dart*)
-    (cd "$flutter_bin_path/cache/dart-sdk/bin" && patchelf --set-rpath "$HOME/.fluttermux/flutter/bin/cache/dart-sdk/bin/:$PREFIX/glibc/lib/" dart*)
-
-    # Patch other binaries in the utils directory
-    (cd "$flutter_bin_path/cache/dart-sdk/bin/utils" && patchelf --set-interpreter "$PREFIX/glibc/lib/ld-linux-aarch64.so.1" *)
-    (cd "$flutter_bin_path/cache/dart-sdk/bin/utils" && patchelf --set-rpath "$HOME/.fluttermux/flutter/bin/cache/dart-sdk/bin/:$PREFIX/glibc/lib/" *)
-  else
-    tput bold
-    tput setaf 1
-    echo "Flutter SDK directory not found. Make sure Flutter is installed."
-    exit 1
+    spinner "sleep 1" "Checking Engine" "Installing Engine"
     tput sgr0
-    tput cnorm
+  else
+  if [ ! -f $ver ]; then
+        ver=$file
+    fi
+    if [ -e "$HOME/.fluttermux/engine/engine.tar.gz" ]; then
+      mkdir -p $dest/artifacts
+      mkdir -p $dest/pkg
+      (cd "$HOME/.fluttermux/engine" && spinner "tar -xf engine.tar.gz" "Extracting Engine" "Extract")
+      mv ~/.fluttermux/engine/sky_engine $dest/pkg
+      cp $ver "$dest/linux-sdk.stamp"
+      cp $ver "$dest/flutter_sdk.stamp"
+      cp $ver "$dest/font-subset.stamp"
+      mv ~/.fluttermux/engine $dest/artifacts
+    else
+      tput bold
+      tput setaf 2
+      spinner "sleep 1" "Downloading Engine" "Starting Download.."
+      mkdir -p $HOME/.fluttermux/engine
+      (cd ~/.fluttermux/engine && curl -OL https://github.com/mumumusuc/termux-flutter/releases/download/3.16.5/engine.tar.gz && spinner "tar -xf engine.tar.gz" "Extracing Engine" "Extract")
+      mv ~/.fluttermux/engine/sky_engine $dest/pkg
+      cp $ver "$dest/linux-sdk.stamp"
+      cp $ver "$dest/flutter_sdk.stamp"
+      cp $ver "$dest/font-subset.stamp"
+      mv ~/.fluttermux/engine $dest/artifacts
+    fi
   fi
+rm -f "$dest/artifacts/engine/engine.tar.gz" "$dest/artifacts/engine/engine.version" 2>/dev/null
 }
 
-patch_flutter_sdk_binary(){
-  tput bold
-  tput setaf 2
-  spinner "sleep 2" "Patching Flutter Sdk.." "Patching Flutter"
-  tput sgr0
-  local flutter_engine="$HOME/.fluttermux/flutter/bin/cache/artifacts/engine/linux-arm64/"
-  (cd "$flutter_engine/" && patchelf --set-interpreter "$PREFIX/glibc/lib/ld-linux-aarch64.so.1" impellerc)
-  (cd "$flutter_engine/" && patchelf --set-interpreter "$PREFIX/glibc/lib/ld-linux-aarch64.so.1" font-subset)
-  (cd "$flutter_engine/" && patchelf --set-interpreter "$PREFIX/glibc/lib/ld-linux-aarch64.so.1" flutter_tester)
-  (cd "$flutter_engine/" && patchelf --set-interpreter "$PREFIX/glibc/lib/ld-linux-aarch64.so.1" gen_snapshot)
-
-  
-  (cd "$flutter_engine/" && patchelf --set-rpath "$HOME/.fluttermux/flutter/bin/cache/artifacts/engine/linux-arm64/:$PREFIX/glibc/lib/" impellerc)
-  (cd "$flutter_engine/" && patchelf --set-rpath "$HOME/.fluttermux/flutter/bin/cache/artifacts/engine/linux-arm64/:$PREFIX/glibc/lib/" gen_snapshot)
-  (cd "$flutter_engine/" && patchelf --set-rpath "$HOME/.fluttermux/flutter/bin/cache/artifacts/engine/linux-arm64/:$PREFIX/glibc/lib/" flutter_tester)
-  (cd "$flutter_engine/" && patchelf --set-rpath "$HOME/.fluttermux/flutter/bin/cache/artifacts/engine/linux-arm64/:$PREFIX/glibc/lib/" font-subset)
-
+getting_dart_sdk(){
+  dest="$HOME/.fluttermux/flutter/bin/cache"
+  dart_sdk_path="$dest/dart-sdk/bin/"
+  if [ -e "$dart_sdk_path" ]; then
+    tput bold
+    tput setaf 2
+    spinner "sleep 1" "Checking Dart Sdk" "Installing Dart Sdk"
+    tput sgr0
+  else
+    if [ -e "$HOME/.fluttermux/dart-sdk.tar.gz" ]; then
+      rm -rf $dest/dart-sdk
+      rm -rf $dest/engine-dart-sdk.stamp
+      (cd "$HOME/.fluttermux" && spinner "tar -xf dart-sdk.tar.gz" "Extracting Dart Sdk" "Extract")
+      mv ~/.fluttermux/dart-sdk $dest/.
+      mv ~/.fluttermux/engine-dart-sdk.stamp $dest/.
+    else
+      tput bold
+      tput setaf 2
+      spinner "sleep 1" "Downloading Dart Sdk" "Starting Download.."
+      (cd ~/.fluttermux/ && curl -OL https://github.com/mumumusuc/termux-flutter/releases/download/3.16.5/dart-sdk.tar.gz && spinner "tar -xf dart-sdk.tar.gz" "Extracing Dart Sdk" "Extract")
+      mv ~/.fluttermux/dart-sdk $dest/.
+      mv ~/.fluttermux/engine-dart-sdk.stamp $dest/.
+    fi
+  fi
+rm -f "$HOME/.fluttermux/dart-sdk.tar.gz" 2>/dev/null
 }
-
 
 set_exports() {
   local shell_profile
@@ -188,7 +161,7 @@ set_exports() {
     "export PATH=\$ANDROID/cmdline-tools/latest:\$PATH"
     "export ANDROID_SDK=\$HOME/\$ANDROID"
     "export PATH=\$ANDROID_SDK:\$PATH"
-    "export JAVA_HOME=\$HOME/.fluttermux/jdk-19.0.2"
+    "export JAVA_HOME=\$PREFIX/opt/openjdk"
     "export PATH=\$PATH:\$JAVA_HOME/bin"
     "export _JAVA_OPTIONS=-Djava.io.tmpdir=\$PREFIX/tmp"
   )
@@ -242,9 +215,10 @@ flutter_and_android_setup(){
 }
 
 flutter_only_setup() {
-  check_gpkg_dev_installed
   install_packages_if_not_installed
   getting_flutter_clone
+  getting_engine
+  getting_dart_sdk
   set_exports
 
 
@@ -273,7 +247,6 @@ flutter_only_setup() {
     # Check if the error.log file contains the "pub upgrade" error message
     if grep -q "Unable to 'pub upgrade' flutter tool" error.log; then
         spinner "sleep 1" "-patching dart sdk" "patch"
-        patch_dart_sdk_binary
         if flutter doctor; then
           spinner "sleep 1" "Running Flutter Doctor after patch" "Doctor"
         else
@@ -285,14 +258,6 @@ flutter_only_setup() {
 		tput bold
     spinner "sleep 1" "Flutter doctor completed successfully." "Doctor"
   fi 
-
-
-  impellerc_path="$HOME/.fluttermux/flutter/bin/cache/artifacts/engine/linux-arm64/impellerc"
-  if [ -e "$impellerc_path" ]; then
-    patch_flutter_sdk_binary
-  else
-    flutter doctor -v
-  fi
 }
 
 getting_flutter_clone() {
@@ -308,48 +273,6 @@ getting_flutter_clone() {
     spinner "sleep 1" "Flutter is Already Exist" "Continue.."
   fi
 }
-
-setting_up_java(){
-
-  java_path="$HOME/.fluttermux/jdk-19.0.2/lib/"
-  if [ -e "$java_path" ]; then
-    tput bold
-    tput setaf 2
-    spinner "sleep 1" "Checking For java" "Installing Java"
-    
-  else
-    (cd ~/.fluttermux && rm -rf jdk-19.0.2)
-    (cd ~/.fluttermux && rm -rf openjdk-19.0.2_linux-aarch64_bin.tar.gz)
-    tput bold 
-    spinner "sleep 1" "Downloading Java" "Starting Download.."
-    tput sgr0
-    (cd ~/.fluttermux/ && curl -OL https://download.java.net/java/GA/jdk19.0.2/fdb695a9d9064ad6b064dc6df578380c/7/GPL/openjdk-19.0.2_linux-aarch64_bin.tar.gz)
-    tput bold
-    (cd ~/.fluttermux && spinner "tar -xf openjdk-19.0.2_linux-aarch64_bin.tar.gz" "Extracing Java" "Extract")
-    tput sgr0
-  fi
-  patch_java_binary
-}
-
-patch_java_binary(){ 
-	if [ -e "$HOME/.fluttermux/jdk-19.0.2/lib" ]; then	
-	  tput bold
-	  tput setaf 2
-	  spinner "sleep 1" "-Patching Java JDK binary.." "Binary Patch"
-	  tput sgr0
-	  (cd ~/.fluttermux/jdk-19.0.2/bin/ && patchelf --set-interpreter "$PREFIX/glibc/lib/ld-linux-aarch64.so.1" *)
-	  (cd ~/.fluttermux/jdk-19.0.2/bin/ && patchelf --set-rpath "$HOME/.fluttermux/jdk-19.0.2/bin/:$HOME/.fluttermux/jdk-19.0.2/lib/:$PREFIX/glibc/lib/" *)
-	  (cd ~/.fluttermux/jdk-19.0.2/lib/ && patchelf --set-rpath "$HOME/.fluttermux/jdk-19.0.2/lib/:$PREFIX/glibc/lib/" jspawnhelper)
-	  (cd ~/.fluttermux/jdk-19.0.2/lib/ && patchelf --set-rpath "$HOME/.fluttermux/jdk-19.0.2/lib/:$PREFIX/glibc/lib/" jexec)
-	
-	  (cd ~/.fluttermux/jdk-19.0.2/lib/ && patchelf --set-interpreter "$PREFIX/glibc/lib/ld-linux-aarch64.so.1" jspawnhelper)
-	  (cd ~/.fluttermux/jdk-19.0.2/lib/ && patchelf --set-interpreter "$PREFIX/glibc/lib/ld-linux-aarch64.so.1" jexec)
-	  tput cnorm
-	else
-	  setting_up_java
-	fi
-}
-
 
 getting_android_sdk_files(){
 
@@ -497,7 +420,6 @@ install_neovim(){
 
 # Function for Android SDK only setup
 android_only_setup() {
- setting_up_java
  getting_android_sdk_files
  getting_cmdline_files
  getting_build_tools
@@ -505,6 +427,7 @@ android_only_setup() {
 
  source ~/.bashrc
  flutter config --android-sdk ~/.fluttermux/Android/
+ flutter config --jdk-dir=$PREFIX/opt/openjdk
  fix_cmdline_shebang
  fix_platform_shebang
  fix_flutter
@@ -567,42 +490,6 @@ select_installation_system() {
   done
 }
 
-patch_dart() {
-  if [ -e "$HOME/.fluttermux/flutter/bin/cache/dart-sdk/bin/" ];then
-    patch_dart_sdk_binary
-  else 
-    tput bold
-    tput setaf 1
-    spinner "sleep 2" "Dart not found Please install it" "Getting Installer.."
-    select_installation_system
-  fi
-}
-
-patch_flutter() {
-    
-  if [ -e "$HOME/.fluttermux/flutter/bin/cache/artifacts/engine/linux-arm64" ];then
-    patch_flutter_sdk_binary
-  else 
-    tput bold
-    tput setaf 1
-    spinner "sleep 2" "Flutter Engine not found Please install it" "Getting Installer.."
-    select_installation_system
-  fi
-    # Add your code to patch Flutter here
-}
-
-patch_java() {
-    
-  if [ -e "$HOME/.fluttermux/jdk-19.0.2/bin/" ];then
-    patch_java_binary
-  else 
-    tput bold
-    tput setaf 1
-    spinner "sleep 2" "Java not found Please install it" "Getting Installer.."
-    setting_up_java
-  fi
-    # Add your code to patch Java here
-}
 fix_sdk() {
   fix_cmdline_shebang
   fix_platform_shebang
@@ -621,6 +508,7 @@ fix_flutter(){
   spinner "sleep 1" "Fixing Flutter Executable Permission" "Fixing Permission"
   (cd ~/.fluttermux/flutter/bin/ && chmod +x flutter && termux-fix-shebang flutter)
   (cd ~/.fluttermux/flutter/bin/ && chmod +x dart && termux-fix-shebang dart)	
+  (cd ~/.fluttermux/flutter/bin/cache/dart-sdk/bin/ && chmod +x *)
   (cd ~/.fluttermux/flutter/bin/cache/dart-sdk/bin/snapshots/ && chmod +x *)
 	tput sgr0
 }
@@ -717,10 +605,9 @@ help() {
     normal=$(tput sgr0)
 
     # Display usage information with formatting
-    echo "${bold}Usage:${normal} $0 [--patch <task>] [--fix <task>] [--ide] [--install] [--uninstall] [--help]"
+    echo "${bold}Usage:${normal} $0 [--fix <task>] [--ide] [--install] [--uninstall] [--help]"
     echo ""
     echo "${bold}Options:${normal}"
-    echo "  ${bold}--patch <task>${normal}  : Patch a specific task (sdk, dart, flutter, java)"
     echo "  ${bold}--fix <task>${normal}    : Fix a specific task (sdk, all, flutter, gradle)"
     echo "  ${bold}--create <task>${normal} : Create flutter app with gradle task supoort"
     echo "  ${bold}--version${normal}       : Get Fluttermux Version"
@@ -743,12 +630,6 @@ help() {
     echo ""
     echo "  - Run --fix Flutter and ensure Flutter binary permissions:"
     echo "    $0 --fix flutter"
-    echo ""
-    echo "  - To patch Dart and Flutter manually (after downloading Flutter):"
-    echo "    $0 --patch sdk"
-    echo ""
-    echo "  - To patch Java manually (after downloading JDK):"
-    echo "    $0 --patch java"
 }
 
 # Check for command-line arguments
@@ -759,19 +640,6 @@ fi
 
 while [ $# -gt 0 ]; do
     case "$1" in
-        --patch)
-            shift
-            case "$1" in
-                sdk|dart|flutter|java)
-                    patch_"$1"
-                    ;;
-                *)
-                    echo "Invalid task after --patch: $1"
-                    help
-                    exit 1
-                    ;;
-            esac
-            ;;
         --fix)
             shift
             case "$1" in
@@ -789,7 +657,7 @@ while [ $# -gt 0 ]; do
     	    shift
     	    app_name="$1"
     	    shift
-   	    flutter_args=("$@")  # Store the remaining arguments in an array
+   	     flutter_args=("$@")  # Store the remaining arguments in an array
     	    fluttermux_create "$app_name" "${flutter_args[@]}"
     	    ;;
 
@@ -818,4 +686,3 @@ while [ $# -gt 0 ]; do
 done
 
 tput cnorm  # Restores the cursor visibility
-
