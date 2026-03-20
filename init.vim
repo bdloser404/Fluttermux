@@ -125,6 +125,7 @@ nmap <C-M> :exe 'silent !dartfmt %'<CR>
 "autocmd VimEnter * :CocCommand flutter.lsp.restart | redraw!
 "autocmd VimEnter *.dart :if &ft == 'dart' | CocCommand flutter.lsp.restart | endif | redraw!
 
+"autocmd VimEnter *.dart :CocCommand flutter.lsp.restart | redraw!
 autocmd VimEnter *.dart :CocCommand flutter.lsp.restart | redraw!
 "== AUTOCMD END ================================
 
